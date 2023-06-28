@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Search a book</title>
+</head>
+<body>
+<form th:method="GET" th:action="@{/books/search}" th:object="${searched_books}">
+	<label for="name">Enter the name of book</label>
+	<input type="text" th:field="*{name}" id="name">
+</body>
+</html>
