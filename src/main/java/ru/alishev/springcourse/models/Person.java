@@ -29,17 +29,19 @@ public class Person {
 	private int id;
 
     @NotEmpty(message="name shouldn't be empty")
-    @Size(min=1, max=30, message="Name should be betweeb 1 and 30 characters")
+    @Size(min=1, max=30, message="Name should be between 1 and 30 characters")
     @Column(name = "name")
     private String name;
 
-    @Min(value=0, message="Enter valid date")
+    @Min(value=6, message="Enter valid date")
     @Max(value=150,message="Enter valid date")
     @Column(name = "age")
     private int age;
 
     @OneToMany(mappedBy = "owner")
-    public List<Book> books;
+    private List<Book> books;
+    
+    
     
 	public List<Book> getBooks() {
 		return books;

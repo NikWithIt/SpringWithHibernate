@@ -1,4 +1,5 @@
 package ru.alishev.springcourse.services;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,12 +70,16 @@ public class BookService {
 	public void release(int id) {
 		bookRepository.findById(id).ifPresent(book-> { 
 			book.setOwner(null);
+			book.setReservedAt(null);
 		});
 	}
 	
 	@Transactional
 	public void takeBook(int id, Person person) {
-		bookRepository.findById(id).ifPresent(book -> book.setOwner(person));
+		bookRepository.findById(id).ifPresent(book -> {
+			book.setOwner(person);
+			book.setReservedAt(new Date());
+		});
 	}
 	
 	
@@ -87,5 +92,16 @@ public class BookService {
 	
 	public List <Book> findByNameStartingWith(String name) {
 		return bookRepository.findByNameStartingWith(name);
+	}
+	
+	public boolean isExpiration(Book book) {
+		long tenDays = 10 * 24 * 60 * 60 * 1000;
+		Date currentDate = new Date();
+		if (currentDate.getTime() - book.getReservedAt().getTime() < tenDays) {
+			return false;
+		} else {
+			return true;
+		}
+		
 	}
 }

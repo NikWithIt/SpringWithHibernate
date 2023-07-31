@@ -11,7 +11,7 @@
 
 <div th:if=${ordered_books}>
 	<div th:each="book:${ordered_books}">
-		<a th:text="${book.getName()+', '+book.getAuthor}">Book</a>
+		<a th:style="${book.getIsExpired()}?'color:red':'color:blue'" th:text="${book.getName()+', '+book.getAuthor}">Book</a>
 	</div>
 </div>
 

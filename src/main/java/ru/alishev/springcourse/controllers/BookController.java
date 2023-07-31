@@ -37,7 +37,6 @@ public class BookController {
 		super();
 		this.bookService = bookService;
 		this.peopleService = peopleService;
-		//this.bookValidator = bookValidator;
 	}
 
 	@GetMapping()
@@ -120,6 +119,7 @@ public class BookController {
 			  @ModelAttribute("book") Book book, Model model) {
 		model.addAttribute("person", model);
 		bookService.takeBook(bookId, person);
+		System.out.println(book.getReservedAt());
 		return "redirect:/books/{id}";
 	}
 	
@@ -130,9 +130,14 @@ public class BookController {
 	}
 	
 	@GetMapping("/search")
-	public String search(Model model, @RequestParam String name) {
-		model.addAttribute("searched_books", bookService.findByNameStartingWith(name));
-		return "/books/search";
+    public String searchPage() {
+        return "books/search";
+    }
+
+	@PostMapping("/search")
+	public String search(Model model, @RequestParam String query) {
+		model.addAttribute("books", bookService.findByNameStartingWith(query));
+		return "books/search";
 	}
 	
 }

@@ -1,5 +1,7 @@
 package ru.alishev.springcourse.models;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,9 +10,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.persistence.Temporal;
+
 
 @Entity
 @Table(name = "Book")
@@ -37,6 +43,35 @@ public class Book {
 	@JoinColumn(name = "owner_id", referencedColumnName = "id")
 	private Person owner;
 	
+	@Column(name = "reserved_at")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date reservedAt;
+	
+	@Transient
+	boolean isExpired;
+	
+	public boolean getIsExpired() {
+		long tenDays = 10 * 24 * 60 * 60 * 1000;
+		Date currentDate = new Date();
+		if (currentDate.getTime() - this.getReservedAt().getTime() < tenDays) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	public void setIsExpired(boolean isExpired) {
+		this.isExpired = isExpired;
+	}
+
+	public Date getReservedAt() {
+		return reservedAt;
+	}
+
+	public void setReservedAt(Date reservedAt) {
+		this.reservedAt = reservedAt;
+	}
+
 	public Person getOwner() {
 		return owner;
 	}
@@ -89,4 +124,5 @@ public class Book {
 	public void setYearOfProduction(int yearOfProduction) {
 		this.yearOfProduction = yearOfProduction;
 	}
+	
 }
